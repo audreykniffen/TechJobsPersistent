@@ -32,19 +32,9 @@ namespace TechJobsPersistent.Controllers
         [HttpGet("/Add")]
         public IActionResult AddJob()
         {/* 
-            No code to borrow here either (There might be something in Coding Events but I don't have that to look at so)
+            No exact code to borrow here either but there is something similar in the AddJob in our skill controller...
             
             To add a job we're going to pass an instance of an AddJobViewModel back to the view
-
-
-            
-
-
-                        AddJobViewModel addJobViewModel = new AddJobViewModel(context.Employers.ToList(), context.Skills.ToList());
-
-            return View(addJobViewModel);
-
-
 
              */
             return View();
