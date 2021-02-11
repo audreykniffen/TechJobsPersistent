@@ -10,10 +10,17 @@
     We're gonna need some more fields here.
 
     Gonna need a dropdown with all the employers in the Db and a link to add a new employer if they don't find what they're looking for
-    we'll need some asp "stuff" to make it all work, so check out the Skill/AddJob if you get stumped. It's not exactly what you need
-    but it'll unblock what might be giving you pause.
+    we'll need some asp "stuff" to make it all work, so check out the Skill/AddJob if you get stumped. 
+   
+    It's not exactly what you need but it'll unblock what might be giving you pause.
 
 
-                    <input type="submit" value="Add Job" />
+
+    When we're adding in our Skill check boxes. it won't look quite the same as the Employers (cause those are a SelectListItem, and this is a List<Skillls>)
+    We'll have to loop across all the skills in the Model and use their .Id and .Name to populate the values needed for the checkboxes. 
+    Use the input tag code the book provides. 
+
+    Make sure to include the link to add a new sklill if the skill they want isn't in the currently displayed options.
+                 
 </form>
 

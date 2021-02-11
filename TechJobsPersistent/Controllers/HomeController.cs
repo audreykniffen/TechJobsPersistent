@@ -55,7 +55,7 @@ namespace TechJobsPersistent.Controllers
 
                 
                  When we add our Skills, we will need to iterate across all of the selected skills - a string array - (cause we can shoose more than one skill per job)
-                    Create a nw JobSkill with the properties of
+                    Create a new JobSkill with the properties of
                         JobId being set to the ID of the new Job we're creating
                         Job being set to the new Job we're creating,
                         SkillID being set to the value of the skill we are currently looking at in the array (remember what type of array is it, that will probably need handled)
