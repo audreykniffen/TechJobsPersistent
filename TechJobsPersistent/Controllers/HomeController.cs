@@ -50,21 +50,16 @@ namespace TechJobsPersistent.Controllers
             IF the model is valid then
                 create a Job object that 
                     will pass the properties (Name, EmployerId, and Employer) from the ViewModel that it's taking in.
+                   
+                    - remember that the Employer is an employer object, so we have to search for that object in the Db using the EmployerId
 
-                Then we need to add this new Employer object that we've crated to the Employers table in the Db
+                Then we need to add this new Job object that we've crated to the Jobs table in the Db
                    Then save the changes to the Db
-                   when all that works we'll redirect to see the list of Employers
+                   when all that works we'll redirect to see the list of Jobs
 
             If none of that happens (cause the model isn't valid), then we want to go to the Add view and 
             pass it the information that is in the View Model from the attempted addition
 
-      
-            When we test this at some point our dropdown (SelectListItem) is going to show up empty. 
-            so we have to add some context for when the form is loaded the first time (Look up in the AddJob)
-
-
-
-            Yeah this is where it got hard so....
             */
 
             return View();
