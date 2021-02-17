@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TechJobsPersistent.Data;
 using TechJobsPersistent.Models;
 using TechJobsPersistent.ViewModels;
 
@@ -12,33 +13,57 @@ namespace TechJobsPersistent.Controllers
 {
     public class EmployerController : Controller
     {
+        private JobDbContext context;
+
+        public EmployerController(JobDbContext dbContext)
+        {
+            context = dbContext;
+        }
         // create a private DbContext 
         // pass it into an EmployerController constructor
-            //Look at the Search Controller if you get stumped on this one
+        //Look at the Search Controller if you get stumped on this one
 
 
         // GET: /<controller>/
         public IActionResult Index()
         {
-            // pass ALL the Employer objects in teh Db into the view
-                // Look at the SkillController Index to see if you can borrow some code from there. 
-   
-            return View();
+            List<Employer> employers = context.Employers.ToList();
+            return View(employers);
         }
+        // pass ALL the Employer objects in teh Db into the view
+        // Look at the SkillController Index to see if you can borrow some code from there.
 
         public IActionResult Add()
         {
+            Employer employer = new Employer();
+            return View(employer);
+
             // make a new AddEmployerViewModel instance 
             // make sure your View is going to the form (cshtml named the same as this action)  
             // that will need this AddEmployerViewModel
-                // Peek at the Skills Controller again. It won't look exactly the same, but it's the same idea. 
-
-            return View();
-
+            // Peek at the Skills Controller again. It won't look exactly the same, but it's the same idea. 
         }
 
-        public IActionResult ProcessAddEmployerForm()
+        public IActionResult ProcessAddEmployerForm(AddEmployerViewModel viewModel)
         {
+            if (ModelState.IsValid)
+            {
+                Employer employer = new Employer
+                {
+                    Name = viewModel.Name,
+                    Location = viewModel.Location
+                };
+
+                context.Employers.Add(employer);
+                context.SaveChanges();
+                return Redirect("/Employer");
+            }
+
+            return View("Add", viewModel);
+        }
+
+     
+     
             // Ok there's nowhere we can kinda directly copy code from to make this one happen. So I'm gonna walk it through
             // just like I'd be live coding it.
 
@@ -62,11 +87,11 @@ namespace TechJobsPersistent.Controllers
                */
 
 
-            return View();
-        }
+    
 
     public IActionResult About(int id)
         {
+            Employer employer = context.Employers.Find(id);
             /* There is an About in Skills... but what's there is overkill for what we need here. 
                 But we can take a look at it and understand what it's doing right? (Comments continued on the Skills Controller)
 
@@ -77,8 +102,8 @@ namespace TechJobsPersistent.Controllers
                 now when we type "context.Employer." we're gonna get some options. There's one really near the top of that list
                 that will take in a parameter and search for it in the Db..... do we think this might help??? 
             */
-            
-            return View();
+
+            return View(employer);
         }
     }
 }
