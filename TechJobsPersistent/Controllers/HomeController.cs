@@ -31,48 +31,42 @@ namespace TechJobsPersistent.Controllers
 
         [HttpGet("/Add")]
         public IActionResult AddJob()
-        {/* 
-            No exact code to borrow here either but there is something similar in the AddJob in our skill controller...
-            
-            To add a job we're going to pass an instance of an AddJobViewModel back to the view
+        {
+            List<Employer> employers = context.Employers.ToList();
+            List<Skill> possibleSkills = context.Skills.ToList();
+            AddJobViewModel addJobViewModel = new AddJobViewModel(employers, possibleSkills);
 
-             */
-            return View();
+            return View(addJobViewModel);
         }
 
-        public IActionResult ProcessAddJobForm()
+        public IActionResult ProcessAddJobForm(AddJobViewModel addJobViewModel, string[] selectedSkills)
         {
+            if (ModelState.IsValid)
+            {
+                Job job = new Job
+                {
+                    Name = addJobViewModel.Name,
+                    EmployerId = addJobViewModel.EmployerId,
+                    Employer = context.Employers.Find(addJobViewModel.EmployerId),
+                };
 
-            /* So this will be kinda Like ProcessAddEmployerForm that you did in the Employer Controller
-            
-            This action needs to take in an instance of the AddJobViewModel and
-            
-            If the model is valid then
-                create a Job object that 
-                    will pass the properties (Name, EmployerId, and Employer) from the ViewModel that it's taking in.
-                   
-                    - remember that the Employer is an employer object, so we have to search for that object in the Db using the EmployerId
+                for (int i = 0; i < selectedSkills.Length; i++)
+                {
+                    JobSkill jobSkill = new JobSkill
+                    {
+                        JobId = job.Id,
+                        Job = job,
+                        SkillId = Int32.Parse(selectedSkills[i]),
+                    };
+                    context.JobSkills.Add(jobSkill);
+                }
 
-                
-                 When we add our Skills, we will need to iterate across all of the selected skills - a string array - (cause we can shoose more than one skill per job)
-                    Create a new JobSkill with the properties of
-                        JobId being set to the ID of the new Job we're creating
-                        Job being set to the new Job we're creating,
-                        SkillID being set to the value of the skill we are currently looking at in the array (remember what type of array is it, that will probably need handled)
-                    Add this new skill to the JobSkills Db
-                    
+                context.Jobs.Add(job);
+                context.SaveChanges();
+                return Redirect("Index");
+            }
 
-                Then we need to add this new Job object that we've crated to the Jobs table in the Db
-                Then save the changes to the Db
-
-                when all that works we'll redirect to see the list of Jobs   
-
-            If none of that happens (cause the model isn't valid), then we want to go to the Add view and 
-            pass it the information that is in the View Model from the attempted addition
-
-            */
-
-            return View();
+            return View("Add", addJobViewModel);
         }
 
         public IActionResult Detail(int id)
@@ -91,3 +85,32 @@ namespace TechJobsPersistent.Controllers
         }
     }
 }
+/* So this will be kinda Like ProcessAddEmployerForm that you did in the Employer Controller
+
+This action needs to take in an instance of the AddJobViewModel and
+
+If the model is valid then
+    create a Job object that 
+        will pass the properties (Name, EmployerId, and Employer) from the ViewModel that it's taking in.
+
+        - remember that the Employer is an employer object, so we have to search for that object in the Db using the EmployerId
+
+
+     When we add our Skills, we will need to iterate across all of the selected skills - a string array - (cause we can shoose more than one skill per job)
+        Create a new JobSkill with the properties of
+            JobId being set to the ID of the new Job we're creating
+            Job being set to the new Job we're creating,
+            SkillID being set to the value of the skill we are currently looking at in the array (remember what type of array is it, that will probably need handled)
+        Add this new skill to the JobSkills Db
+
+
+    Then we need to add this new Job object that we've crated to the Jobs table in the Db
+    Then save the changes to the Db
+
+    when all that works we'll redirect to see the list of Jobs   
+
+If none of that happens (cause the model isn't valid), then we want to go to the Add view and 
+pass it the information that is in the View Model from the attempted addition
+
+*/
+
